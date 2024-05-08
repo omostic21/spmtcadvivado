@@ -1,0 +1,42 @@
+#ifndef QUANTIZATION_HPP
+#define QUANTIZATION_HPP
+
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+// Represents a quantized value with a specific bit-width
+struct QuantizedValue {
+    int value;
+    unsigned int bitWidth;
+
+    QuantizedValue(int v, unsigned int bw) : value(v), bitWidth(bw) {}
+};
+
+// Utility class for bit-wise operations and HiKonv convolution
+class HiKonv {
+public:
+    // Example method to pack two quantized values into a single integer
+    static int packValues(const QuantizedValue& a, const QuantizedValue& b) {
+        // Ensure this example assumes both values fit into an int for simplicity
+        return (a.value << a.bitWidth) | b.value;
+    }
+
+    // Method to perform a simplified version of HiKonv convolution
+    // This is a conceptual example that needs to be tailored to your hardware specifics
+    static std::vector<int> convolve(const std::vector<int>& input, const std::vector<int>& kernel, unsigned int bitWidth) {
+        std::vector<int> output;
+        // Simple convolution logic for demonstration purposes
+        for (size_t i = 0; i <= input.size() - kernel.size(); ++i) {
+            int sum = 0;
+            for (size_t j = 0; j < kernel.size(); ++j) {
+                // Using packValues to mimic bitwise operations in a real implementation
+                sum += packValues(QuantizedValue(input[i + j], bitWidth), QuantizedValue(kernel[j], bitWidth));
+            }
+            output.push_back(sum);
+        }
+        return output;
+    }
+};
+
+#endif // QUANTIZATION_HPP
